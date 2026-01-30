@@ -280,30 +280,43 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
     setAnalysis(prev => ({ ...prev, isAnalyzing: false }));
   }, [analysis.brandGuess, analysis.currentTheory, analysis.commentary, saveCurrentAd]);
 
+  // Start camera (without analysis)
+  const startCamera = useCallback(async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }
+      });
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        streamRef.current = stream;
+        setIsStreaming(true);
+        setError(null);
+      }
+    } catch (err) {
+      setError('Camera access denied. Point me at your TV!');
+      console.error('Camera error:', err);
+    }
+  }, []);
+
+  // Dismiss intro and auto-start camera
+  const handleEnter = useCallback(() => {
+    setShowIntro(false);
+    startCamera();
+  }, [startCamera]);
+
   // Immersive single-button handler
   const handleImmersiveAction = useCallback(async () => {
-    if (!isStreaming) {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }
-        });
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-          streamRef.current = stream;
-          setIsStreaming(true);
-          setError(null);
-          setHasAnalyzed(true);
-          setTimeout(() => {
-            startAnalysis();
-          }, 500);
-        }
-      } catch (err) {
-        setError('Camera access denied. Point me at your TV!');
-        console.error('Camera error:', err);
-      }
+    if (!analysis.isAnalyzing && !hasAnalyzed) {
+      // First time: START! — begin analysis
+      setHasAnalyzed(true);
+      setTimeout(() => {
+        startAnalysis();
+      }, 100);
     } else if (analysis.isAnalyzing) {
+      // STOP
       stopAnalysis();
     } else {
+      // ANALYZE AD — clear and restart
       setAnalysis({
         isAnalyzing: false,
         currentTheory: '',
@@ -315,12 +328,12 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
         startAnalysis();
       }, 100);
     }
-  }, [isStreaming, analysis.isAnalyzing, startAnalysis, stopAnalysis]);
+  }, [analysis.isAnalyzing, hasAnalyzed, startAnalysis, stopAnalysis]);
 
-  const immersiveButtonLabel = !isStreaming
-    ? (hasAnalyzed ? 'ANALYZE ANOTHER' : 'ANALYZE AD')
-    : analysis.isAnalyzing ? 'STOP' : 'ANALYZE ANOTHER';
-  const immersiveButtonClass = !isStreaming ? 'btn-primary' : analysis.isAnalyzing ? 'btn-danger' : 'btn-primary';
+  const immersiveButtonLabel = !hasAnalyzed
+    ? 'ANALYZE AD'
+    : analysis.isAnalyzing ? 'STOP' : 'ANALYZE AD';
+  const immersiveButtonClass = analysis.isAnalyzing ? 'btn-danger' : 'btn-primary';
 
   // Social sharing
   const shareToX = (text: string) => {
@@ -353,56 +366,6 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
     }
   };
 
-  const generateShareCard = (ad: AdSession) => {
-    const canvas = document.createElement('canvas');
-    canvas.width = 1080;
-    canvas.height = 1080;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    // Black background
-    ctx.fillStyle = '#0a0a0a';
-    ctx.fillRect(0, 0, 1080, 1080);
-
-    // Gold brand name
-    ctx.fillStyle = '#ffd700';
-    ctx.font = 'bold 72px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText(ad.brandGuess, 540, 400);
-
-    // White one-liner (wrapped)
-    ctx.fillStyle = '#f0f0f0';
-    ctx.font = '36px sans-serif';
-    const words = ad.oneLiner.split(' ');
-    let line = '';
-    let y = 500;
-    for (const word of words) {
-      const test = line + word + ' ';
-      if (ctx.measureText(test).width > 900 && line) {
-        ctx.fillText(line.trim(), 540, y);
-        line = word + ' ';
-        y += 48;
-      } else {
-        line = test;
-      }
-    }
-    ctx.fillText(line.trim(), 540, y);
-
-    // Red SnarkBowl branding at bottom
-    ctx.fillStyle = '#ff3333';
-    ctx.font = 'bold 48px sans-serif';
-    ctx.fillText('SNARKBOWL', 540, 950);
-    ctx.fillStyle = '#888';
-    ctx.font = '24px sans-serif';
-    ctx.fillText('#SnarkBowl #SuperBowl', 540, 1000);
-
-    // Download
-    const link = document.createElement('a');
-    link.download = `snarkbowl-${ad.brandGuess.toLowerCase().replace(/\s+/g, '-')}.png`;
-    link.href = canvas.toDataURL('image/png');
-    link.click();
-  };
-
   // Cleanup on unmount
   useEffect(() => {
     return () => {
@@ -414,6 +377,31 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     return () => { document.body.style.overflow = ''; };
+  }, []);
+
+  // Dynamic bottom offset: detect browser chrome height via visualViewport
+  useEffect(() => {
+    const update = () => {
+      const vv = window.visualViewport;
+      if (vv) {
+        const offset = window.innerHeight - vv.height;
+        document.documentElement.style.setProperty('--bottom-offset', `${Math.max(0, offset)}px`);
+      }
+    };
+    update();
+    const vv = window.visualViewport;
+    if (vv) {
+      vv.addEventListener('resize', update);
+      vv.addEventListener('scroll', update);
+    }
+    window.addEventListener('resize', update);
+    return () => {
+      if (vv) {
+        vv.removeEventListener('resize', update);
+        vv.removeEventListener('scroll', update);
+      }
+      window.removeEventListener('resize', update);
+    };
   }, []);
 
   if (showIntro) {
@@ -430,7 +418,7 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
             <p>Point your camera at the Big Game.</p>
             <p>We'll roast every ad in <em>real time</em>.</p>
           </div>
-          <button className="immersive-intro-go" onClick={() => setShowIntro(false)}>
+          <button className="immersive-intro-go" onClick={handleEnter}>
             LET'S ROAST
           </button>
         </div>
@@ -543,7 +531,6 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
                 <div className="share-card-actions">
                   <button onClick={() => shareToX(`${ad.brandGuess}: ${ad.oneLiner}`)}>Share to X</button>
                   <button onClick={() => copyText(`${ad.brandGuess}: ${ad.oneLiner} #SnarkBowl #SuperBowl`)}>Copy</button>
-                  <button onClick={() => generateShareCard(ad)}>Download Card</button>
                 </div>
               </div>
             ))}
