@@ -379,14 +379,27 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
     return () => { document.body.style.overflow = ''; };
   }, []);
 
-  // Dynamic bottom offset: detect browser chrome height via visualViewport
+  // Dynamic bottom offset: detect browser chrome via multiple signals
   useEffect(() => {
     const update = () => {
+      // Use dvh vs vh difference, or visualViewport vs innerHeight
       const vv = window.visualViewport;
+      let offset = 0;
       if (vv) {
-        const offset = window.innerHeight - vv.height;
-        document.documentElement.style.setProperty('--bottom-offset', `${Math.max(0, offset)}px`);
+        // visualViewport.height excludes virtual keyboard but may not exclude
+        // Safari bottom bar. Use the larger of both signals.
+        offset = Math.max(0, window.innerHeight - vv.height);
       }
+      // On Safari mobile, window.innerHeight already excludes the bottom bar
+      // but CSS 100vh/100dvh may not match. Detect via a probe element.
+      const probe = document.createElement('div');
+      probe.style.cssText = 'position:fixed;top:0;bottom:0;visibility:hidden;pointer-events:none;';
+      document.body.appendChild(probe);
+      const cssHeight = probe.offsetHeight;
+      document.body.removeChild(probe);
+      const innerDiff = Math.max(0, cssHeight - window.innerHeight);
+      offset = Math.max(offset, innerDiff);
+      document.documentElement.style.setProperty('--bottom-offset', `${offset}px`);
     };
     update();
     const vv = window.visualViewport;
@@ -395,12 +408,17 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
       vv.addEventListener('scroll', update);
     }
     window.addEventListener('resize', update);
+    window.addEventListener('orientationchange', update);
+    // Re-check after page fully settles (Safari delays)
+    const timer = setTimeout(update, 1000);
     return () => {
+      clearTimeout(timer);
       if (vv) {
         vv.removeEventListener('resize', update);
         vv.removeEventListener('scroll', update);
       }
       window.removeEventListener('resize', update);
+      window.removeEventListener('orientationchange', update);
     };
   }, []);
 
