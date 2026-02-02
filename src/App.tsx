@@ -226,7 +226,7 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
     analysisIntervalRef.current = setInterval(async () => {
       // Check session time limit
       const elapsed = Date.now() - intervalStartTime;
-      totalAnalysisTimeRef.current += 3000;
+      totalAnalysisTimeRef.current += 6000;
       if (totalAnalysisTimeRef.current >= SESSION_LIMIT_MS) {
         setSessionLimitHit(true);
         if (analysisIntervalRef.current) {
@@ -282,7 +282,7 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
 
         contextWindow = `Theory: ${result.theory}. Recent: ${result.commentary}`;
       }
-    }, 3000);
+    }, 6000); // 6 seconds between frames — gives time to read
   }, [isStreaming, captureFrame, analyzeFrame, saveCurrentAd, analysis.brandGuess]);
 
   // Stop analysis
@@ -502,15 +502,7 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
         </div>
       )}
 
-      {/* Bottom-left: working theory */}
-      {analysis.currentTheory && (
-        <div className="immersive-theory">
-          <span className="theory-label">WORKING THEORY:</span>
-          <p>{analysis.currentTheory}</p>
-        </div>
-      )}
-
-      {/* Bottom-right: commentary */}
+      {/* Bottom: commentary (full width) */}
       {analysis.commentary.length > 0 && (
         <div className="immersive-commentary">
           {analysis.commentary.map((entry) => (
@@ -518,14 +510,6 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
               {entry.text}
             </div>
           ))}
-        </div>
-      )}
-
-      {/* Bottom-center: brand detected */}
-      {analysis.brandGuess && (
-        <div className="immersive-brand">
-          <span className="brand-label">SUSPECT:</span>
-          <span className="brand-name">{analysis.brandGuess}</span>
         </div>
       )}
 

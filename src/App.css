@@ -196,6 +196,7 @@ body {
   font-size: 0.75rem;
   letter-spacing: 0.3em;
   color: var(--accent-gold);
+  white-space: nowrap;
 }
 
 .immersive-intro-instructions {
@@ -203,6 +204,7 @@ body {
   color: var(--text-secondary);
   font-size: 0.85rem;
   line-height: 1.6;
+  text-wrap: balance;
 }
 
 .immersive-intro-instructions em {
@@ -414,54 +416,16 @@ body {
 /* right, action button bottom center     */
 /* ====================================== */
 
-/* Brand/suspect — left side, above theory */
-.immersive-brand {
-  position: absolute;
-  bottom: calc(11rem + var(--sai-bottom));
-  left: calc(0.5rem + var(--sai-left));
-  z-index: 10;
-  background: rgba(0, 255, 102, 0.9);
-  color: var(--bg-primary);
-  padding: 0.3rem 0.7rem;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  max-width: 45%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Working theory — bottom-left, above action btn */
-.immersive-theory {
-  position: absolute;
-  bottom: calc(5rem + var(--sai-bottom));
-  left: calc(0.5rem + var(--sai-left));
-  z-index: 10;
-  max-width: 45%;
-  background: rgba(0, 0, 0, 0.75);
-  border-left: 3px solid var(--accent-cyan);
-  padding: 0.4rem 0.6rem;
-}
-
-.immersive-theory .theory-label {
-  font-size: 0.5rem;
-}
-
-.immersive-theory p {
-  font-size: 0.65rem;
-  line-height: 1.3;
-}
-
-/* Commentary — right side, above action btn */
+/* Commentary — full width at bottom, above action btn */
 .immersive-commentary {
   position: absolute;
   bottom: calc(5rem + var(--sai-bottom));
+  left: calc(0.5rem + var(--sai-left));
   right: calc(0.5rem + var(--sai-right));
   z-index: 10;
-  max-width: 48%;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.3rem;
 }
 
 .immersive-commentary-entry {
@@ -733,19 +697,8 @@ body {
     flex-wrap: nowrap;
   }
 
-  .immersive-theory {
-    bottom: calc(2rem + var(--sai-bottom));
-    max-width: 32%;
-  }
-
   .immersive-commentary {
     bottom: calc(2rem + var(--sai-bottom));
-    max-width: 32%;
-  }
-
-  .immersive-brand {
-    bottom: calc(7rem + var(--sai-bottom));
-    left: calc(0.5rem + var(--sai-left));
   }
 
   .immersive-action-btn.btn-danger {
@@ -768,17 +721,7 @@ body {
     bottom: calc(7rem + var(--sai-bottom));
   }
 
-  .immersive-theory {
-    bottom: calc(11rem + var(--sai-bottom));
-    max-width: 44%;
-  }
-
   .immersive-commentary {
     bottom: calc(11rem + var(--sai-bottom));
-    max-width: 48%;
-  }
-
-  .immersive-brand {
-    bottom: calc(17rem + var(--sai-bottom));
   }
 }
