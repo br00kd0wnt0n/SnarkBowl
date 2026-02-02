@@ -20,6 +20,7 @@
   --sai-bottom: env(safe-area-inset-bottom, 0px);
   --sai-left: env(safe-area-inset-left, 0px);
   --sai-right: env(safe-area-inset-right, 0px);
+  --app-height: 100dvh; /* overridden by JS with window.innerHeight */
 }
 
 * {
@@ -165,9 +166,10 @@ body {
 
 .app.immersive-intro {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
   width: 100vw;
-  height: 100dvh;
+  height: var(--app-height, 100dvh);
   overflow: hidden;
   background: var(--bg-primary);
   display: flex;
@@ -305,9 +307,10 @@ body {
 
 .app.immersive {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
   width: 100vw;
-  height: 100dvh;
+  height: var(--app-height, 100dvh);
   overflow: hidden;
   background: #000;
 }
@@ -752,23 +755,22 @@ body {
 
 /* ========================= */
 /* PORTRAIT EXTRA SPACING    */
-/* Use JS --bottom-offset    */
 /* ========================= */
 
 @media (orientation: portrait) {
   .immersive-action-btn {
-    bottom: calc(1.5rem + var(--sai-bottom, 0px) + var(--bottom-offset, 0px));
+    bottom: calc(1rem + var(--sai-bottom));
   }
 
   .immersive-theory {
-    bottom: calc(5.5rem + var(--sai-bottom, 0px) + var(--bottom-offset, 0px));
+    bottom: calc(5rem + var(--sai-bottom));
   }
 
   .immersive-commentary {
-    bottom: calc(5.5rem + var(--sai-bottom, 0px) + var(--bottom-offset, 0px));
+    bottom: calc(5rem + var(--sai-bottom));
   }
 
   .immersive-brand {
-    bottom: calc(11.5rem + var(--sai-bottom, 0px) + var(--bottom-offset, 0px));
+    bottom: calc(10.5rem + var(--sai-bottom));
   }
 }
