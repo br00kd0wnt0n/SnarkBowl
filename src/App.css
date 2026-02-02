@@ -548,15 +548,16 @@ body {
 
 .share-snark-btn {
   position: absolute;
-  top: calc(0.5rem + var(--sai-top));
-  right: calc(0.5rem + var(--sai-right));
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 10;
   background: var(--accent-gold);
   color: var(--bg-primary);
   border: none;
-  padding: 0.4rem 0.8rem;
+  padding: 0.6rem 1.5rem;
   font-family: var(--font-display);
-  font-size: 0.9rem;
+  font-size: 1.2rem;
   letter-spacing: 0.05em;
   cursor: pointer;
   transition: all 0.2s;
@@ -629,12 +630,6 @@ body {
   gap: 0.5rem;
 }
 
-.share-card-brand {
-  font-family: var(--font-display);
-  font-size: 1.5rem;
-  color: var(--accent-gold);
-}
-
 .share-card-liner {
   font-size: 0.85rem;
   line-height: 1.4;
@@ -699,6 +694,15 @@ body {
 
   .immersive-commentary {
     bottom: calc(2rem + var(--sai-bottom));
+  }
+
+  .share-snark-btn {
+    top: calc(0.5rem + var(--sai-top));
+    right: calc(0.5rem + var(--sai-right));
+    left: auto;
+    transform: none;
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
   }
 
   .immersive-action-btn.btn-danger {

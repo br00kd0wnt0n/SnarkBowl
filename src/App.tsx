@@ -376,7 +376,7 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
 
   const shareAll = async () => {
     const allText = completedAds
-      .map(ad => `${ad.brandGuess}: ${ad.oneLiner}`)
+      .map(ad => ad.oneLiner)
       .join('\n\n');
     const fullText = `SNARKBOWL ROAST REEL\n\n${allText}\n\n#SnarkBowl #SuperBowl`;
 
@@ -486,7 +486,7 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
         </div>
       )}
 
-      {/* Share button — top-right */}
+      {/* Share button — centered above action button when stopped */}
       {completedAds.length > 0 && !analysis.isAnalyzing && (
         <button className="share-snark-btn" onClick={() => setShowShareOverlay(true)}>
           SHARE THE SNARK ({completedAds.length})
@@ -551,11 +551,10 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
           <div className="share-overlay-cards">
             {completedAds.map(ad => (
               <div key={ad.id} className="share-card">
-                <div className="share-card-brand">{ad.brandGuess}</div>
                 <div className="share-card-liner">{ad.oneLiner}</div>
                 <div className="share-card-actions">
-                  <button onClick={() => shareToX(`${ad.brandGuess}: ${ad.oneLiner}`)}>Share to X</button>
-                  <button onClick={() => copyText(`${ad.brandGuess}: ${ad.oneLiner} #SnarkBowl #SuperBowl`)}>Copy</button>
+                  <button onClick={() => shareToX(ad.oneLiner)}>Share to X</button>
+                  <button onClick={() => copyText(`${ad.oneLiner} #SnarkBowl #SuperBowl`)}>Copy</button>
                 </div>
               </div>
             ))}
