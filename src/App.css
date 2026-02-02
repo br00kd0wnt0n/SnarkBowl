@@ -763,20 +763,20 @@ body {
 
 @media (orientation: portrait) {
   .immersive-action-btn {
-    bottom: calc(5rem + var(--sai-bottom));
+    bottom: calc(7rem + var(--sai-bottom));
   }
 
   .immersive-theory {
-    bottom: calc(9rem + var(--sai-bottom));
+    bottom: calc(11rem + var(--sai-bottom));
     max-width: 44%;
   }
 
   .immersive-commentary {
-    bottom: calc(9rem + var(--sai-bottom));
+    bottom: calc(11rem + var(--sai-bottom));
     max-width: 48%;
   }
 
   .immersive-brand {
-    bottom: calc(15rem + var(--sai-bottom));
+    bottom: calc(17rem + var(--sai-bottom));
   }
 }
