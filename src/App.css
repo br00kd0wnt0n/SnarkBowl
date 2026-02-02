@@ -350,8 +350,9 @@ body {
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  white-space: nowrap;
   max-width: 45%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Working theory — bottom-left, above action btn */
