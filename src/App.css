@@ -755,22 +755,28 @@ body {
 
 /* ========================= */
 /* PORTRAIT EXTRA SPACING    */
+/* Large bottom values to     */
+/* clear all mobile browser   */
+/* toolbars (Chrome ~56px,    */
+/* Safari ~44px)              */
 /* ========================= */
 
 @media (orientation: portrait) {
   .immersive-action-btn {
-    bottom: calc(1rem + var(--sai-bottom));
+    bottom: calc(5rem + var(--sai-bottom));
   }
 
   .immersive-theory {
-    bottom: calc(5rem + var(--sai-bottom));
+    bottom: calc(9rem + var(--sai-bottom));
+    max-width: 44%;
   }
 
   .immersive-commentary {
-    bottom: calc(5rem + var(--sai-bottom));
+    bottom: calc(9rem + var(--sai-bottom));
+    max-width: 48%;
   }
 
   .immersive-brand {
-    bottom: calc(10.5rem + var(--sai-bottom));
+    bottom: calc(15rem + var(--sai-bottom));
   }
 }
