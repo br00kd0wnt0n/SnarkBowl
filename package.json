@@ -1,7 +1,7 @@
 {
   "name": "snarkbowl",
   "version": "1.0.0",
-  "description": "Real-time AI roast of Super Bowl advertisements",
+  "description": "Real-time roast of Super Bowl ads",
   "private": true,
   "type": "module",
   "scripts": {
