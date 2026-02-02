@@ -484,12 +484,12 @@ body {
 .immersive-commentary-entry:nth-last-child(2) { opacity: 0.6; }
 .immersive-commentary-entry:nth-last-child(3) { opacity: 0.3; }
 
-/* Action button — bottom center with generous clearance */
+/* Action button — centered by default */
 .immersive-action-btn {
   position: absolute;
-  bottom: calc(1rem + var(--sai-bottom));
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
   z-index: 10;
   font-family: var(--font-display);
   font-size: 1.4rem;
@@ -516,6 +516,10 @@ body {
   font-size: 1rem;
   padding: 0.4rem 1.2rem;
   animation: pulseBg 1.5s infinite;
+  /* When analyzing, move STOP to bottom so it doesn't block camera */
+  top: auto;
+  bottom: calc(1rem + var(--sai-bottom));
+  transform: translateX(-50%);
 }
 
 /* Placeholder — center, when no camera */
@@ -743,11 +747,8 @@ body {
     left: calc(0.5rem + var(--sai-left));
   }
 
-  .immersive-action-btn {
-    bottom: calc(1rem + var(--sai-bottom));
-  }
-
   .immersive-action-btn.btn-danger {
+    bottom: calc(1rem + var(--sai-bottom));
     font-size: 0.85rem;
     padding: 0.35rem 1rem;
   }
@@ -762,7 +763,7 @@ body {
 /* ========================= */
 
 @media (orientation: portrait) {
-  .immersive-action-btn {
+  .immersive-action-btn.btn-danger {
     bottom: calc(7rem + var(--sai-bottom));
   }
 
