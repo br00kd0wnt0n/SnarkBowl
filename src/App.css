@@ -532,6 +532,34 @@ body {
   letter-spacing: 0.2em;
 }
 
+/* Session limit banner */
+.session-limit-banner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 20;
+  background: rgba(0, 0, 0, 0.9);
+  border: 1px solid var(--accent-gold);
+  padding: 1.5rem 2rem;
+  text-align: center;
+  max-width: 85%;
+  animation: fadeSlideIn 0.4s ease-out;
+}
+
+.session-limit-banner p:first-child {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  color: var(--accent-gold);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.session-limit-banner p:last-child {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
 /* Error in immersive mode */
 .immersive-error {
   position: absolute;

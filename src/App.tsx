@@ -57,6 +57,9 @@ function App() {
   const [completedAds, setCompletedAds] = useState<AdSession[]>([]);
   const [currentAdStart, setCurrentAdStart] = useState<number>(0);
   const [showShareOverlay, setShowShareOverlay] = useState(false);
+  const [sessionLimitHit, setSessionLimitHit] = useState(false);
+  const totalAnalysisTimeRef = useRef(0); // cumulative ms of analysis
+  const SESSION_LIMIT_MS = 20 * 60 * 1000; // 20 minutes
 
   const [analysis, setAnalysis] = useState<AnalysisState>({
     isAnalyzing: false,
@@ -165,6 +168,12 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
         })
       });
 
+      if (response.status === 429) {
+        const data = await response.json();
+        setError(data.message || 'Rate limit reached. Please try again later.');
+        return null;
+      }
+
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
       }
@@ -212,8 +221,22 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
 
     let contextWindow = '';
     let runningCommentary: string[] = [];
+    const intervalStartTime = Date.now();
 
     analysisIntervalRef.current = setInterval(async () => {
+      // Check session time limit
+      const elapsed = Date.now() - intervalStartTime;
+      totalAnalysisTimeRef.current += 3000;
+      if (totalAnalysisTimeRef.current >= SESSION_LIMIT_MS) {
+        setSessionLimitHit(true);
+        if (analysisIntervalRef.current) {
+          clearInterval(analysisIntervalRef.current);
+          analysisIntervalRef.current = null;
+        }
+        setAnalysis(prev => ({ ...prev, isAnalyzing: false }));
+        return;
+      }
+
       const frame = captureFrame();
       if (!frame) return;
 
@@ -307,6 +330,7 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
 
   // Immersive single-button handler
   const handleImmersiveAction = useCallback(async () => {
+    if (sessionLimitHit) return;
     if (!analysis.isAnalyzing && !hasAnalyzed) {
       // First time: START! — begin analysis
       setHasAnalyzed(true);
@@ -329,7 +353,7 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
         startAnalysis();
       }, 100);
     }
-  }, [analysis.isAnalyzing, hasAnalyzed, startAnalysis, stopAnalysis]);
+  }, [analysis.isAnalyzing, hasAnalyzed, startAnalysis, stopAnalysis, sessionLimitHit]);
 
   const immersiveButtonLabel = !hasAnalyzed
     ? 'ANALYZE AD'
@@ -533,6 +557,14 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
       {!isStreaming && (
         <div className="immersive-placeholder">
           <p>POINT AT YOUR TV</p>
+        </div>
+      )}
+
+      {/* Session limit message */}
+      {sessionLimitHit && (
+        <div className="session-limit-banner">
+          <p>You've hit the 20-minute session limit.</p>
+          <p>Take a breather and try again later!</p>
         </div>
       )}
 
