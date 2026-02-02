@@ -380,7 +380,7 @@ body {
 
 .immersive-tropes {
   position: absolute;
-  top: calc(3rem + var(--sai-top));
+  top: calc(3.75rem + var(--sai-top));
   left: calc(0.5rem + var(--sai-left));
   z-index: 10;
   display: flex;
