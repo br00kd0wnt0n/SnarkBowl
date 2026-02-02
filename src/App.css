@@ -227,6 +227,78 @@ body {
   color: var(--bg-primary);
 }
 
+/* Disclaimer [i] button */
+.disclaimer-btn {
+  position: absolute;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--text-secondary);
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-style: italic;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.disclaimer-btn:hover {
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
+}
+
+/* Disclaimer overlay */
+.disclaimer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.disclaimer-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--bg-tertiary);
+  padding: 1.5rem;
+  max-width: 400px;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  animation: fadeSlideIn 0.3s ease-out;
+}
+
+.disclaimer-card strong {
+  color: var(--accent-gold);
+}
+
+.disclaimer-close {
+  margin-top: 1.2rem;
+  padding: 0.5rem 1.5rem;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  background: var(--accent-red);
+  color: var(--text-primary);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.disclaimer-close:hover {
+  background: var(--accent-gold);
+  color: var(--bg-primary);
+}
+
 /* ===================== */
 /* IMMERSIVE VIEW        */
 /* ===================== */

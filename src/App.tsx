@@ -52,6 +52,7 @@ function App() {
   const [isStreaming, setIsStreaming] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showIntro, setShowIntro] = useState(true);
+  const [showDisclaimer, setShowDisclaimer] = useState(false);
   const [hasAnalyzed, setHasAnalyzed] = useState(false);
   const [completedAds, setCompletedAds] = useState<AdSession[]>([]);
   const [currentAdStart, setCurrentAdStart] = useState<number>(0);
@@ -440,6 +441,15 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
             LET'S ROAST
           </button>
         </div>
+        <button className="disclaimer-btn" onClick={() => setShowDisclaimer(true)}>i</button>
+        {showDisclaimer && (
+          <div className="disclaimer-overlay" onClick={() => setShowDisclaimer(false)}>
+            <div className="disclaimer-card" onClick={e => e.stopPropagation()}>
+              <p><strong>SNARKBOWL</strong> is a second-screen entertainment experience created by <strong>Ralph</strong>. All commentary is AI-generated via OpenAI's GPT-4 Vision API and is intended purely for humor. We do not endorse or take responsibility for any opinions expressed. No affiliation with the NFL, Super Bowl, or any advertised brands. Use at your own risk of snorting your drink.</p>
+              <button className="disclaimer-close" onClick={() => setShowDisclaimer(false)}>GOT IT</button>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
