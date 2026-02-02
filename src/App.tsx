@@ -431,7 +431,7 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
             <span className="title-snark">SNARK</span>
             <span className="title-bowl">BOWL</span>
           </h1>
-          <p className="immersive-intro-tagline">REAL-TIME ROAST OF THE BIG GAME</p>
+          <p className="immersive-intro-tagline">REAL-TIME ROAST OF SUPER BOWL ADS</p>
           <div className="immersive-intro-instructions">
             <p>Point your camera at the Big Game.</p>
             <p>We'll roast every ad in <em>real time</em>.</p>
