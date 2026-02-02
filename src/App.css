@@ -63,7 +63,7 @@ body {
 }
 
 /* Shared styles */
-.title-snark {
+.title-slop {
   color: var(--text-primary);
   display: block;
 }
@@ -347,7 +347,7 @@ body {
   align-items: baseline;
 }
 
-.immersive-logo-snark {
+.immersive-logo-slop {
   font-family: var(--font-display);
   font-size: 1.2rem;
   color: var(--text-primary);

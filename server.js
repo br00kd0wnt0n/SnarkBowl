@@ -92,5 +92,5 @@ app.get('*', (_req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`SnarkBowl server running on port ${PORT}`);
+  console.log(`SlopBowl server running on port ${PORT}`);
 });

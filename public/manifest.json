@@ -1,6 +1,6 @@
 {
-  "name": "SNARKBOWL",
-  "short_name": "SnarkBowl",
+  "name": "SLOPBOWL",
+  "short_name": "SlopBowl",
   "description": "Real-time roast of Super Bowl ads",
   "start_url": "/",
   "display": "standalone",

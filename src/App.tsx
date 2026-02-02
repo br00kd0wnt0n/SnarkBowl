@@ -384,7 +384,7 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
 
   // Social sharing
   const shareToX = (text: string) => {
-    const tweet = encodeURIComponent(`${text} #SnarkBowl #SuperBowl`);
+    const tweet = encodeURIComponent(`${text} #SlopBowl #SuperBowl`);
     window.open(`https://twitter.com/intent/tweet?text=${tweet}`, '_blank');
   };
 
@@ -400,7 +400,7 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
     const allText = completedAds
       .map(ad => ad.oneLiner)
       .join('\n\n');
-    const fullText = `SNARKBOWL ROAST REEL\n\n${allText}\n\n#SnarkBowl #SuperBowl`;
+    const fullText = `SLOPBOWL ROAST REEL\n\n${allText}\n\n#SlopBowl #SuperBowl`;
 
     if (navigator.share) {
       try {
@@ -456,7 +456,7 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
         <div className="scanlines" />
         <div className="immersive-intro-content">
           <h1 className="immersive-intro-title">
-            <span className="title-snark">SNARK</span>
+            <span className="title-slop">SLOP</span>
             <span className="title-bowl">BOWL</span>
           </h1>
           <p className="immersive-intro-tagline">REAL-TIME ROAST OF SUPER BOWL ADS</p>
@@ -472,7 +472,7 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
         {showDisclaimer && (
           <div className="disclaimer-overlay" onClick={() => setShowDisclaimer(false)}>
             <div className="disclaimer-card" onClick={e => e.stopPropagation()}>
-              <p><strong>SNARKBOWL</strong> is a second-screen entertainment experience created by <strong>Ralph</strong>. All commentary is AI-generated via OpenAI's GPT-4 Vision API and is intended purely for humor. We do not endorse or take responsibility for any opinions expressed. No affiliation with the NFL, Super Bowl, or any advertised brands. Use at your own risk of snorting your drink.</p>
+              <p><strong>SLOPBOWL</strong> is a second-screen entertainment experience created by <strong>Ralph</strong>. All commentary is AI-generated via OpenAI's GPT-4 Vision API and is intended purely for humor. We do not endorse or take responsibility for any opinions expressed. No affiliation with the NFL, Super Bowl, or any advertised brands. Use at your own risk of snorting your drink.</p>
               <button className="disclaimer-close" onClick={() => setShowDisclaimer(false)}>GOT IT</button>
             </div>
           </div>
@@ -497,7 +497,7 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
 
       {/* Top-left: logo */}
       <div className="immersive-logo">
-        <span className="immersive-logo-snark">SNARK</span>
+        <span className="immersive-logo-slop">SLOP</span>
         <span className="immersive-logo-bowl">BOWL</span>
       </div>
 
@@ -511,7 +511,7 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
       {/* Share button — centered above action button when stopped */}
       {completedAds.length > 0 && !analysis.isAnalyzing && (
         <button className="share-snark-btn" onClick={() => setShowShareOverlay(true)}>
-          SHARE THE SNARK ({completedAds.length})
+          SHARE THE SLOP ({completedAds.length})
         </button>
       )}
 
@@ -576,7 +576,7 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
                 <div className="share-card-liner">{ad.oneLiner}</div>
                 <div className="share-card-actions">
                   <button onClick={() => shareToX(ad.oneLiner)}>Share to X</button>
-                  <button onClick={() => copyText(`${ad.oneLiner} #SnarkBowl #SuperBowl`)}>Copy</button>
+                  <button onClick={() => copyText(`${ad.oneLiner} #SlopBowl #SuperBowl`)}>Copy</button>
                 </div>
               </div>
             ))}
