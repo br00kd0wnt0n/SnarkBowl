@@ -369,6 +369,10 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
       clearInterval(analysisIntervalRef.current);
       analysisIntervalRef.current = null;
     }
+    // Clear the bubble queue so no more commentary appears
+    bubbleQueueRef.current = [];
+    setCommentaryBubbles([]);
+
     // Save current ad when stopping
     if (analysis.brandGuess || analysis.currentTheory) {
       saveCurrentAd(
