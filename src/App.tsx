@@ -486,8 +486,10 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
     return () => { document.body.style.overflow = ''; };
   }, []);
 
-  // Set --app-height from window.innerHeight (reliably excludes browser chrome)
+  // Set --app-height from window.innerHeight (only after intro is dismissed)
   useEffect(() => {
+    if (showIntro) return; // Don't run during intro to prevent layout shift
+
     const update = () => {
       document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`);
     };
@@ -501,14 +503,11 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
       // Delay for orientation change to settle
       setTimeout(update, 100);
     });
-    // Re-check after page fully settles
-    const timer = setTimeout(update, 500);
     return () => {
-      clearTimeout(timer);
       if (vv) vv.removeEventListener('resize', update);
       window.removeEventListener('resize', update);
     };
-  }, []);
+  }, [showIntro]);
 
   if (showIntro) {
     return (
