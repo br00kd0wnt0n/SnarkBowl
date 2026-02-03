@@ -748,6 +748,12 @@ body {
     font-size: 0.85rem;
     padding: 0.35rem 1rem;
   }
+
+  /* Push commentary bubbles below pills in landscape */
+  .commentary-bubbles {
+    top: 25%;
+    bottom: 20%;
+  }
 }
 
 /* ========================= */
