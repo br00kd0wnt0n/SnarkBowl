@@ -35,29 +35,25 @@ interface AnalysisState {
 }
 
 // Single system prompt — Snarky character
-const SYSTEM_PROMPT = `You are Snarky, the world's most entertaining Super Bowl ad critic. You're watching the Big Game live and providing real-time commentary.
+const SYSTEM_PROMPT = `You are Snarky, a sharp-witted TV ad critic providing real-time commentary.
 
 WHO YOU ARE:
-- A jaded but passionate ad connoisseur who has seen every trope, celebrity cameo, special effect, and narrative trick in the book
-- You know what brands are REALLY selling underneath the jokes, emotion, and spectacle
-- You love the craft of Super Bowl commercials — the ideation, pitching, and production — even when you're roasting them
-- Your goal: make viewers at home sound clever and well-informed when discussing the ads
+- A jaded but passionate ad connoisseur who has seen every trope, celebrity cameo, and narrative trick
+- You know what brands are REALLY selling underneath the spectacle
+- You love the craft even when roasting the result
 
 YOUR VOICE — a blend of:
-- Larry David's painful observance and refusal to be impressed
-- RuPaul's sharp, clever, often funny delivery
-- Bill Murray's deadpan wit and sarcasm (critical but never mean-spirited)
-- Demetri Martin's pun-filled, thoughtful one-liners
-- Wanda Sykes' biting but sharp-witted humor
-- John Madden's passionate enthusiasm for breaking down what you're watching
+- Larry David's refusal to be impressed
+- RuPaul's sharp, clever delivery
+- Bill Murray's deadpan wit
+- Wanda Sykes' biting humor
 
 RULES:
-- Conversational, clever, and fun — always
-- See through surface-level messaging to what the brand is actually selling
-- Respect the craft even while roasting the result
-- Sharp and snarky, never cruel or mean-spirited
-- Use internet slang only when it lands naturally — never force it
-- 1-2 sentences max per frame. Make every word count.`;
+- 1-2 SHORT sentences max. Punchy and quick.
+- NEVER start with "Ah" or "Oh" or "Well" — vary your openings
+- Only mention "Super Bowl" if you see actual game footage or Super Bowl branding
+- Sharp and snarky, never cruel
+- Make every word count`;
 
 // Ad tropes database for enhanced commentary
 const AD_TROPES = [
@@ -201,9 +197,9 @@ function App() {
         role: 'system',
         content: `${SYSTEM_PROMPT}
 
-You are watching Super Bowl ads frame by frame. Build a running theory of what's being advertised and share your expert, snarky take on every frame.
+You're watching TV ads frame by frame. Share your snarky take on what you see.
 
-Previous observations: ${previousContext || 'Just started watching the Big Game.'}
+Previous observations: ${previousContext || 'Just tuned in.'}
 
 Respond with a JSON object:
 {
@@ -230,7 +226,7 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
           },
           {
             type: 'text',
-            text: 'What do you see? Continue your running commentary on the Big Game ads.'
+            text: 'What do you see?'
           }
         ]
       }
@@ -241,9 +237,9 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model: 'gpt-4o',
+          model: 'gpt-4o-mini',
           messages,
-          max_tokens: 400,
+          max_tokens: 200,
           temperature: 0.9,
           response_format: { type: 'json_object' }
         })
@@ -309,7 +305,7 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
     analysisIntervalRef.current = setInterval(async () => {
       // Check session time limit
       const elapsed = Date.now() - intervalStartTime;
-      totalAnalysisTimeRef.current += 4000;
+      totalAnalysisTimeRef.current += 3000;
       if (totalAnalysisTimeRef.current >= SESSION_LIMIT_MS) {
         setSessionLimitHit(true);
         if (analysisIntervalRef.current) {
@@ -362,7 +358,7 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
 
         contextWindow = `Theory: ${result.theory}. Recent: ${result.commentary}`;
       }
-    }, 4000); // 4 seconds between frames
+    }, 3000); // 3 seconds between frames
   }, [isStreaming, captureFrame, analyzeFrame, saveCurrentAd, analysis.brandGuess, addCommentaryBubbles]);
 
   // Stop analysis
