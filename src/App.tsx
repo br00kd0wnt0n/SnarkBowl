@@ -355,7 +355,7 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
           ...prev,
           currentTheory: result.theory || prev.currentTheory,
           brandGuess: result.brandGuess || prev.brandGuess,
-          tropeDetected: [...new Set([...prev.tropeDetected, ...(result.tropesDetected || [])])]
+          tropeDetected: [...new Set([...prev.tropeDetected, ...(result.tropesDetected || [])])].slice(-9)
         }));
 
         contextWindow = `Theory: ${result.theory}. Recent: ${result.commentary}`;
