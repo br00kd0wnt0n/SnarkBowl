@@ -69,6 +69,18 @@ const AD_TROPES = [
   { trigger: 'celebrity', response: 'Celebrity spotted. Parasocial trust transfer in progress.' },
 ];
 
+// Initial "watching" messages for immediate feedback
+const WATCHING_MESSAGES = [
+  "Alright, let's see what they're selling us...",
+  "Eyes on the screen. Let's do this.",
+  "Okay, I'm watching. Don't disappoint me.",
+  "Let's see what Madison Avenue cooked up.",
+  "Tuning in. Prepare for opinions.",
+  "Camera's rolling. So are my eyes.",
+  "I'm here. I'm watching. I'm judging.",
+  "Let the roasting commence.",
+];
+
 function App() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -296,6 +308,11 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
     }));
     setCommentaryBubbles([]);
     bubbleQueueRef.current = [];
+
+    // Add immediate "watching" message for feedback
+    const watchingMsg = WATCHING_MESSAGES[Math.floor(Math.random() * WATCHING_MESSAGES.length)];
+    bubbleQueueRef.current.push(watchingMsg);
+
     setCurrentAdStart(Date.now());
 
     let contextWindow = '';
