@@ -135,16 +135,16 @@ function App() {
 
         setCommentaryBubbles(prev => [...prev, newBubble]);
       }
-    }, 3000);
+    }, 2000); // Release a bubble every 2 seconds
     return () => clearInterval(interval);
   }, []);
 
-  // Cleanup expired bubbles (after 15 seconds total - keeps ~3 on screen at a time)
+  // Cleanup expired bubbles (after 10 seconds total)
   useEffect(() => {
     const interval = setInterval(() => {
       const now = Date.now();
       setCommentaryBubbles(prev =>
-        prev.filter(bubble => now - bubble.createdAt < 15000)
+        prev.filter(bubble => now - bubble.createdAt < 10000)
       );
     }, 1000);
     return () => clearInterval(interval);
@@ -309,7 +309,7 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
     analysisIntervalRef.current = setInterval(async () => {
       // Check session time limit
       const elapsed = Date.now() - intervalStartTime;
-      totalAnalysisTimeRef.current += 6000;
+      totalAnalysisTimeRef.current += 4000;
       if (totalAnalysisTimeRef.current >= SESSION_LIMIT_MS) {
         setSessionLimitHit(true);
         if (analysisIntervalRef.current) {
@@ -362,7 +362,7 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
 
         contextWindow = `Theory: ${result.theory}. Recent: ${result.commentary}`;
       }
-    }, 6000); // 6 seconds between frames — gives time to read
+    }, 4000); // 4 seconds between frames
   }, [isStreaming, captureFrame, analyzeFrame, saveCurrentAd, analysis.brandGuess, addCommentaryBubbles]);
 
   // Stop analysis
