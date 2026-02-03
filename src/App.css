@@ -416,38 +416,75 @@ body {
 /* right, action button bottom center     */
 /* ====================================== */
 
-/* Commentary — full width at bottom, above action btn */
-.immersive-commentary {
+/* ========================= */
+/* SCATTERED COMMENTARY      */
+/* ========================= */
+
+.commentary-bubbles {
   position: absolute;
-  bottom: calc(5rem + var(--sai-bottom));
+  top: 25%;
+  bottom: 20%;
   left: calc(0.5rem + var(--sai-left));
   right: calc(0.5rem + var(--sai-right));
   z-index: 10;
+  pointer-events: none;
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  overflow: hidden;
 }
 
-.immersive-commentary-entry {
-  background: rgba(0, 0, 0, 0.75);
-  padding: 0.35rem 0.5rem;
-  font-size: 0.65rem;
-  line-height: 1.25;
-  border-left: 3px solid var(--text-secondary);
-  animation: fadeSlideIn 0.4s ease-out;
+.commentary-bubble {
+  padding: 0.6rem 1rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  line-height: 1.3;
+  max-width: 75%;
+  animation: bubbleFadeInOut 6s ease-out forwards;
 }
 
-.immersive-commentary-entry.suspicious {
-  border-color: var(--accent-gold);
+.commentary-bubble.left {
+  align-self: flex-start;
 }
 
-.immersive-commentary-entry.certain {
-  border-color: var(--accent-green);
+.commentary-bubble.right {
+  align-self: flex-end;
+  text-align: right;
 }
 
-.immersive-commentary-entry:last-child { opacity: 1; }
-.immersive-commentary-entry:nth-last-child(2) { opacity: 0.6; }
-.immersive-commentary-entry:nth-last-child(3) { opacity: 0.3; }
+/* Accent colors */
+.commentary-bubble.accent-black {
+  background: rgba(0, 0, 0, 0.85);
+  color: var(--text-primary);
+}
+
+.commentary-bubble.accent-green {
+  background: rgba(0, 180, 80, 0.9);
+  color: var(--text-primary);
+}
+
+.commentary-bubble.accent-red {
+  background: rgba(220, 50, 50, 0.9);
+  color: var(--text-primary);
+}
+
+@keyframes bubbleFadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  8% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
 
 /* Action button — centered by default */
 .immersive-action-btn {
@@ -692,10 +729,6 @@ body {
     flex-wrap: nowrap;
   }
 
-  .immersive-commentary {
-    bottom: calc(2rem + var(--sai-bottom));
-  }
-
   .share-snark-btn {
     top: calc(0.5rem + var(--sai-top));
     right: calc(0.5rem + var(--sai-right));
@@ -725,7 +758,4 @@ body {
     bottom: calc(7rem + var(--sai-bottom));
   }
 
-  .immersive-commentary {
-    bottom: calc(11rem + var(--sai-bottom));
-  }
 }

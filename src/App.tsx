@@ -2,6 +2,14 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 import './App.css';
 
 // Types
+interface CommentaryBubble {
+  id: string;
+  text: string;
+  position: 'left' | 'right';
+  accent: 'green' | 'black' | 'red';
+  createdAt: number;
+}
+
 interface CommentaryEntry {
   id: string;
   timestamp: number;
@@ -80,6 +88,9 @@ function App() {
   const [currentAdStart, setCurrentAdStart] = useState<number>(0);
   const [showShareOverlay, setShowShareOverlay] = useState(false);
   const [sessionLimitHit, setSessionLimitHit] = useState(false);
+  const [commentaryBubbles, setCommentaryBubbles] = useState<CommentaryBubble[]>([]);
+  const bubblePositionRef = useRef<'left' | 'right'>('left');
+  const accentColorsRef = useRef<Array<'green' | 'black' | 'red'>>(['green', 'black', 'red']);
   const totalAnalysisTimeRef = useRef(0); // cumulative ms of analysis
   const SESSION_LIMIT_MS = 20 * 60 * 1000; // 20 minutes
 
@@ -90,6 +101,42 @@ function App() {
     tropeDetected: [],
     commentary: []
   });
+
+  // Add commentary as scattered bubbles
+  const addCommentaryBubbles = useCallback((text: string) => {
+    // Split into sentences (handle ., !, ?)
+    const sentences = text.split(/(?<=[.!?])\s+/).filter(s => s.trim().length > 0);
+
+    const newBubbles: CommentaryBubble[] = sentences.map((sentence, i) => {
+      // Alternate position
+      const position = bubblePositionRef.current;
+      bubblePositionRef.current = position === 'left' ? 'right' : 'left';
+
+      // Cycle through accent colors
+      const accent = accentColorsRef.current[i % accentColorsRef.current.length];
+
+      return {
+        id: `${Date.now()}-${i}`,
+        text: sentence.trim(),
+        position,
+        accent,
+        createdAt: Date.now() + (i * 200) // Stagger appearance slightly
+      };
+    });
+
+    setCommentaryBubbles(prev => [...prev, ...newBubbles]);
+  }, []);
+
+  // Cleanup expired bubbles (after 6 seconds - 5s visible + 1s fade)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = Date.now();
+      setCommentaryBubbles(prev =>
+        prev.filter(bubble => now - bubble.createdAt < 6000)
+      );
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Stop camera stream
   const stopCamera = useCallback(() => {
@@ -239,6 +286,7 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
       brandGuess: null,
       tropeDetected: []
     }));
+    setCommentaryBubbles([]);
     setCurrentAdStart(Date.now());
 
     let contextWindow = '';
@@ -276,6 +324,7 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
           // Reset for new ad
           runningCommentary = [];
           setCurrentAdStart(Date.now());
+          setCommentaryBubbles([]);
           setAnalysis(prev => ({
             ...prev,
             commentary: [],
@@ -287,16 +336,11 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
 
         runningCommentary.push(result.commentary);
 
-        const newEntry: CommentaryEntry = {
-          id: Date.now().toString(),
-          timestamp: Date.now(),
-          text: result.commentary,
-          confidence: result.confidence
-        };
+        // Add commentary as scattered bubbles
+        addCommentaryBubbles(result.commentary);
 
         setAnalysis(prev => ({
           ...prev,
-          commentary: [...prev.commentary.slice(-2), newEntry],
           currentTheory: result.theory || prev.currentTheory,
           brandGuess: result.brandGuess || prev.brandGuess,
           tropeDetected: [...new Set([...prev.tropeDetected, ...(result.tropesDetected || [])])]
@@ -305,7 +349,7 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
         contextWindow = `Theory: ${result.theory}. Recent: ${result.commentary}`;
       }
     }, 6000); // 6 seconds between frames — gives time to read
-  }, [isStreaming, captureFrame, analyzeFrame, saveCurrentAd, analysis.brandGuess]);
+  }, [isStreaming, captureFrame, analyzeFrame, saveCurrentAd, analysis.brandGuess, addCommentaryBubbles]);
 
   // Stop analysis
   const stopAnalysis = useCallback(() => {
@@ -524,16 +568,18 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
         </div>
       )}
 
-      {/* Bottom: commentary (full width) */}
-      {analysis.commentary.length > 0 && (
-        <div className="immersive-commentary">
-          {analysis.commentary.map((entry) => (
-            <div key={entry.id} className={`immersive-commentary-entry ${entry.confidence}`}>
-              {entry.text}
-            </div>
-          ))}
-        </div>
-      )}
+      {/* Scattered commentary bubbles */}
+      <div className="commentary-bubbles">
+        {commentaryBubbles.map((bubble) => (
+          <div
+            key={bubble.id}
+            className={`commentary-bubble ${bubble.position} accent-${bubble.accent}`}
+            style={{ animationDelay: `${bubble.createdAt - Date.now()}ms` }}
+          >
+            {bubble.text}
+          </div>
+        ))}
+      </div>
 
       {/* Center: single action button */}
       <button className={`immersive-action-btn ${immersiveButtonClass}`} onClick={handleImmersiveAction}>
