@@ -175,6 +175,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding-top: var(--sai-top);
+  padding-bottom: var(--sai-bottom);
+  box-sizing: border-box;
 }
 
 .immersive-intro-content {
@@ -759,4 +762,18 @@ body {
     bottom: calc(7rem + var(--sai-bottom));
   }
 
+  /* Intro screen mobile sizing */
+  .immersive-intro-title {
+    font-size: clamp(3rem, 15vw, 5rem);
+  }
+
+  .immersive-intro-tagline {
+    font-size: clamp(0.6rem, 2.5vw, 0.75rem);
+    letter-spacing: 0.2em;
+  }
+
+  .immersive-intro-go {
+    font-size: clamp(1.1rem, 4vw, 1.5rem);
+    padding: 0.8rem 2rem;
+  }
 }
