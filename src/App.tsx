@@ -79,7 +79,6 @@ const WATCHING_MESSAGES = [
   "Camera's rolling. So are my eyes.",
   "I'm here. I'm watching. I'm judging.",
   "Let the roasting commence.",
-  "Reading your energy...",
 ];
 
 function App() {
@@ -322,12 +321,9 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
 
     let contextWindow = '';
     let runningCommentary: string[] = [];
+    const intervalStartTime = Date.now();
 
-    // Delay first API call to let initial message be read
-    setTimeout(() => {
-      const intervalStartTime = Date.now();
-
-      analysisIntervalRef.current = setInterval(async () => {
+    analysisIntervalRef.current = setInterval(async () => {
       // Check session time limit
       const elapsed = Date.now() - intervalStartTime;
       totalAnalysisTimeRef.current += 4000;
@@ -365,7 +361,6 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
         contextWindow = `Theory: ${result.theory}. Recent: ${result.commentary}`;
       }
     }, 4000); // 4 seconds between frames
-    }, 3000); // 3 second delay before first API call
   }, [isStreaming, captureFrame, analyzeFrame, saveCurrentAd, analysis.brandGuess, addCommentaryBubbles]);
 
   // Stop analysis
