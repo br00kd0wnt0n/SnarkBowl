@@ -194,9 +194,9 @@ body {
 .immersive-intro-logo {
   max-width: 90%;
   width: 500px;
-  height: auto;
-  object-fit: cover;
-  object-position: center top;
+  height: 180px; /* Fixed height to prevent layout shift */
+  object-fit: contain;
+  object-position: center;
   /* Crop out star in bottom-right */
   clip-path: inset(0 12% 5% 0);
 }
@@ -779,6 +779,7 @@ body {
   /* Intro screen mobile sizing */
   .immersive-intro-logo {
     width: clamp(300px, 85vw, 500px);
+    height: clamp(100px, 30vw, 180px);
   }
 
   .immersive-intro-tagline {
