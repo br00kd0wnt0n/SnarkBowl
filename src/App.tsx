@@ -89,8 +89,10 @@ function App() {
   const [showShareOverlay, setShowShareOverlay] = useState(false);
   const [sessionLimitHit, setSessionLimitHit] = useState(false);
   const [commentaryBubbles, setCommentaryBubbles] = useState<CommentaryBubble[]>([]);
+  const bubbleQueueRef = useRef<string[]>([]);
   const bubblePositionRef = useRef<'left' | 'right'>('left');
   const accentColorsRef = useRef<Array<'green' | 'black' | 'red'>>(['green', 'black', 'red']);
+  const accentIndexRef = useRef(0);
   const totalAnalysisTimeRef = useRef(0); // cumulative ms of analysis
   const SESSION_LIMIT_MS = 20 * 60 * 1000; // 20 minutes
 
@@ -102,37 +104,47 @@ function App() {
     commentary: []
   });
 
-  // Add commentary as scattered bubbles
+  // Queue commentary sentences for staggered release
   const addCommentaryBubbles = useCallback((text: string) => {
     // Split into sentences (handle ., !, ?)
     const sentences = text.split(/(?<=[.!?])\s+/).filter(s => s.trim().length > 0);
-
-    const newBubbles: CommentaryBubble[] = sentences.map((sentence, i) => {
-      // Alternate position
-      const position = bubblePositionRef.current;
-      bubblePositionRef.current = position === 'left' ? 'right' : 'left';
-
-      // Cycle through accent colors
-      const accent = accentColorsRef.current[i % accentColorsRef.current.length];
-
-      return {
-        id: `${Date.now()}-${i}`,
-        text: sentence.trim(),
-        position,
-        accent,
-        createdAt: Date.now() + (i * 200) // Stagger appearance slightly
-      };
-    });
-
-    setCommentaryBubbles(prev => [...prev, ...newBubbles]);
+    bubbleQueueRef.current.push(...sentences);
   }, []);
 
-  // Cleanup expired bubbles (after 6 seconds - 5s visible + 1s fade)
+  // Release one bubble from queue every 3 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (bubbleQueueRef.current.length > 0) {
+        const sentence = bubbleQueueRef.current.shift()!;
+
+        // Alternate position
+        const position = bubblePositionRef.current;
+        bubblePositionRef.current = position === 'left' ? 'right' : 'left';
+
+        // Cycle through accent colors
+        const accent = accentColorsRef.current[accentIndexRef.current % accentColorsRef.current.length];
+        accentIndexRef.current++;
+
+        const newBubble: CommentaryBubble = {
+          id: `${Date.now()}`,
+          text: sentence.trim(),
+          position,
+          accent,
+          createdAt: Date.now()
+        };
+
+        setCommentaryBubbles(prev => [...prev, newBubble]);
+      }
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Cleanup expired bubbles (after 15 seconds total - keeps ~3 on screen at a time)
   useEffect(() => {
     const interval = setInterval(() => {
       const now = Date.now();
       setCommentaryBubbles(prev =>
-        prev.filter(bubble => now - bubble.createdAt < 6000)
+        prev.filter(bubble => now - bubble.createdAt < 15000)
       );
     }, 1000);
     return () => clearInterval(interval);
@@ -287,6 +299,7 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
       tropeDetected: []
     }));
     setCommentaryBubbles([]);
+    bubbleQueueRef.current = [];
     setCurrentAdStart(Date.now());
 
     let contextWindow = '';
@@ -325,6 +338,7 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
           runningCommentary = [];
           setCurrentAdStart(Date.now());
           setCommentaryBubbles([]);
+          bubbleQueueRef.current = [];
           setAnalysis(prev => ({
             ...prev,
             commentary: [],
