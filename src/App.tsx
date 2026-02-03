@@ -141,7 +141,11 @@ function App() {
           createdAt: Date.now()
         };
 
-        setCommentaryBubbles(prev => [...prev, newBubble]);
+        setCommentaryBubbles(prev => {
+          const updated = [...prev, newBubble];
+          // Keep max 5 bubbles to prevent overflow clipping
+          return updated.slice(-5);
+        });
       }
     }, 3000); // Release a bubble every 3 seconds (25% fewer)
     return () => clearInterval(interval);
@@ -339,27 +343,8 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
       const result = await analyzeFrame(frame, contextWindow);
 
       if (result) {
-        // Handle ad boundary detection
-        if (result.isNewAd && result.adSummaryOneLiner) {
-          // Save the previous ad
-          saveCurrentAd(
-            analysis.brandGuess || result.brandGuess || 'Unknown Brand',
-            result.adSummaryOneLiner,
-            runningCommentary
-          );
-          // Reset for new ad
-          runningCommentary = [];
-          setCurrentAdStart(Date.now());
-          setCommentaryBubbles([]);
-          bubbleQueueRef.current = [];
-          setAnalysis(prev => ({
-            ...prev,
-            commentary: [],
-            currentTheory: '',
-            brandGuess: null,
-            tropeDetected: []
-          }));
-        }
+        // Ad boundary detection disabled for now - not working reliably
+        // TODO: revisit isNewAd logic later
 
         runningCommentary.push(result.commentary);
 

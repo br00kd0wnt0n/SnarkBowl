@@ -437,7 +437,6 @@ body {
   flex-direction: column;
   justify-content: flex-end;
   gap: 0.6rem;
-  overflow: hidden;
 }
 
 .commentary-bubble {
