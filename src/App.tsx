@@ -515,10 +515,7 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
       <div className="app immersive-intro">
         <div className="scanlines" />
         <div className="immersive-intro-content">
-          <h1 className="immersive-intro-title">
-            <span className="title-slop">SLOP</span>
-            <span className="title-bowl">BOWL</span>
-          </h1>
+          <img src="/SlopLogo.png" alt="SLOP BOWL" className="immersive-intro-logo" />
           <p className="immersive-intro-tagline">REAL-TIME ROAST OF SUPER BOWL ADS</p>
           <div className="immersive-intro-instructions">
             <p>Point your camera at the Big Game.</p>

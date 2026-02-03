@@ -10,9 +10,10 @@
   --text-secondary: #888;
   --accent-red: #ff3333;
   --accent-yellow: #ffcc00;
-  --accent-gold: #ffd700;
-  --accent-green: #00ff66;
-  --accent-cyan: #00ffff;
+  --accent-gold: #8aff00; /* Slime green to match logo */
+  --accent-green: #8aff00;
+  --accent-cyan: #b8ff4a; /* Lighter slime green */
+  --accent-slime: #8aff00;
   --danger: #ff0044;
   --font-mono: 'Space Mono', monospace;
   --font-display: 'Bebas Neue', sans-serif;
@@ -191,10 +192,10 @@ body {
   margin-bottom: 3rem; /* Offset for disclaimer button at bottom */
 }
 
-.immersive-intro-title {
-  font-family: var(--font-display);
-  font-size: 5rem;
-  line-height: 1;
+.immersive-intro-logo {
+  max-width: 80%;
+  width: 400px;
+  height: auto;
 }
 
 .immersive-intro-tagline {
@@ -224,15 +225,16 @@ body {
   font-family: var(--font-display);
   font-size: 1.5rem;
   letter-spacing: 0.1em;
-  background: var(--accent-red);
-  color: var(--text-primary);
+  background: var(--accent-slime);
+  color: var(--bg-primary);
   border: none;
   cursor: pointer;
   transition: all 0.2s;
+  font-weight: bold;
 }
 
 .immersive-intro-go:hover {
-  background: var(--accent-gold);
+  background: var(--accent-cyan);
   color: var(--bg-primary);
 }
 
@@ -508,12 +510,13 @@ body {
 }
 
 .immersive-action-btn.btn-primary {
-  background: var(--accent-red);
-  color: var(--text-primary);
+  background: var(--accent-slime);
+  color: var(--bg-primary);
+  font-weight: bold;
 }
 
 .immersive-action-btn.btn-primary:hover {
-  background: var(--accent-gold);
+  background: var(--accent-cyan);
   color: var(--bg-primary);
 }
 
@@ -770,8 +773,8 @@ body {
   }
 
   /* Intro screen mobile sizing */
-  .immersive-intro-title {
-    font-size: clamp(3rem, 15vw, 5rem);
+  .immersive-intro-logo {
+    width: clamp(250px, 70vw, 400px);
   }
 
   .immersive-intro-tagline {
