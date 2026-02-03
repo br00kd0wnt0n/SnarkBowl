@@ -152,7 +152,7 @@ function App() {
     const interval = setInterval(() => {
       const now = Date.now();
       setCommentaryBubbles(prev =>
-        prev.filter(bubble => now - bubble.createdAt < 10000)
+        prev.filter(bubble => now - bubble.createdAt < 15000)
       );
     }, 1000);
     return () => clearInterval(interval);
