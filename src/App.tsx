@@ -355,7 +355,8 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
           ...prev,
           currentTheory: result.theory || prev.currentTheory,
           brandGuess: result.brandGuess || prev.brandGuess,
-          tropeDetected: [...new Set([...prev.tropeDetected, ...(result.tropesDetected || [])])].slice(-9)
+          tropeDetected: [...new Set([...prev.tropeDetected, ...(result.tropesDetected || [])])].slice(-9),
+          commentary: [...prev.commentary, { id: Date.now().toString(), text: result.commentary, timestamp: Date.now() }]
         }));
 
         contextWindow = `Theory: ${result.theory}. Recent: ${result.commentary}`;
@@ -444,7 +445,7 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
 
   // Social sharing
   const shareToX = (text: string) => {
-    const tweet = encodeURIComponent(`${text} #SlopBowl #SuperBowl`);
+    const tweet = encodeURIComponent(`${text}\n\nslopbowl.ralph.world #SlopBowl #SuperBowl`);
     window.open(`https://twitter.com/intent/tweet?text=${tweet}`, '_blank');
   };
 
@@ -456,15 +457,16 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
     }
   };
 
+
   const shareAll = async () => {
-    const allText = completedAds
-      .map(ad => ad.oneLiner)
-      .join('\n\n');
-    const fullText = `SLOPBOWL ROAST REEL\n\n${allText}\n\n#SlopBowl #SuperBowl`;
+    const roasts = completedAds
+      .map((ad, i) => `${i + 1}. ${ad.oneLiner}`)
+      .join('\n');
+    const fullText = `SLOPBOWL ROAST REEL\n\n${roasts}\n\nslopbowl.ralph.world\n#SlopBowl #SuperBowl`;
 
     if (navigator.share) {
       try {
-        await navigator.share({ text: fullText });
+        await navigator.share({ title: 'SLOPBOWL Roast Reel', text: fullText });
       } catch {
         await copyText(fullText);
       }
@@ -636,7 +638,7 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
                 <div className="share-card-liner">{ad.oneLiner}</div>
                 <div className="share-card-actions">
                   <button onClick={() => shareToX(ad.oneLiner)}>Share to X</button>
-                  <button onClick={() => copyText(`${ad.oneLiner} #SlopBowl #SuperBowl`)}>Copy</button>
+                  <button onClick={() => copyText(`${ad.oneLiner}\n\nslopbowl.ralph.world #SlopBowl #SuperBowl`)}>Copy</button>
                 </div>
               </div>
             ))}
