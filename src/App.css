@@ -740,6 +740,16 @@ body {
   color: var(--accent-gold);
 }
 
+.share-card-actions .btn-delete {
+  border-color: var(--accent-red);
+  color: var(--accent-red);
+}
+
+.share-card-actions .btn-delete:hover {
+  background: var(--accent-red);
+  color: var(--text-primary);
+}
+
 .share-all-btn {
   margin-top: 1.5rem;
   padding: 1rem;

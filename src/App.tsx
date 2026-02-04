@@ -639,6 +639,7 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
                 <div className="share-card-actions">
                   <button onClick={() => shareToX(ad.oneLiner)}>Share to X</button>
                   <button onClick={() => copyText(`${ad.oneLiner}\n\nslopbowl.ralph.world #SlopBowl #SuperBowl`)}>Copy</button>
+                  <button className="btn-delete" onClick={() => setCompletedAds(prev => prev.filter(a => a.id !== ad.id))}>Delete</button>
                 </div>
               </div>
             ))}
