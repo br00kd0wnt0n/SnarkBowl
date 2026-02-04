@@ -193,9 +193,9 @@ body {
 }
 
 .immersive-intro-logo {
-  max-width: 90%;
-  width: 600px;
-  height: 280px; /* Fixed height to prevent layout shift */
+  max-width: 95%;
+  width: 900px;
+  height: 420px; /* Fixed height to prevent layout shift */
   object-fit: contain;
   object-position: center;
   animation: logoFlicker 4s infinite;
@@ -810,8 +810,8 @@ body {
 
   /* Intro screen mobile sizing */
   .immersive-intro-logo {
-    width: clamp(320px, 90vw, 600px);
-    height: clamp(150px, 45vw, 280px);
+    width: clamp(320px, 95vw, 900px);
+    height: clamp(180px, 55vw, 420px);
   }
 
   .immersive-intro-tagline {
