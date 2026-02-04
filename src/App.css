@@ -172,7 +172,7 @@ body {
   width: 100vw;
   height: 100dvh;
   overflow: hidden;
-  background: var(--bg-primary);
+  background: #000000;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -198,6 +198,16 @@ body {
   height: 280px; /* Fixed height to prevent layout shift */
   object-fit: contain;
   object-position: center;
+  animation: logoFlicker 4s infinite;
+}
+
+@keyframes logoFlicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.8; }
+  94% { opacity: 1; }
+  96% { opacity: 0.9; }
+  97% { opacity: 1; }
 }
 
 .immersive-intro-tagline {
