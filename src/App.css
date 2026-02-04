@@ -193,8 +193,8 @@ body {
 
 .immersive-intro-logo {
   max-width: 90%;
-  width: 500px;
-  height: 200px; /* Fixed height to prevent layout shift */
+  width: 600px;
+  height: 280px; /* Fixed height to prevent layout shift */
   object-fit: contain;
   object-position: center;
 }
@@ -237,6 +237,24 @@ body {
 .immersive-intro-go:hover {
   background: var(--accent-cyan);
   color: var(--bg-primary);
+}
+
+/* Ralph branding */
+.ralph-branding {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  z-index: 10;
+}
+
+.ralph-branding img {
+  height: 16px;
+  width: auto;
 }
 
 /* Disclaimer [i] button */
@@ -776,8 +794,8 @@ body {
 
   /* Intro screen mobile sizing */
   .immersive-intro-logo {
-    width: clamp(300px, 85vw, 500px);
-    height: clamp(100px, 30vw, 180px);
+    width: clamp(320px, 90vw, 600px);
+    height: clamp(150px, 45vw, 280px);
   }
 
   .immersive-intro-tagline {

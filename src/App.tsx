@@ -524,6 +524,9 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
             LET'S ROAST
           </button>
         </div>
+        <div className="ralph-branding">
+          Brought to you by <img src="/ralph-logo.png" alt="Ralph" />
+        </div>
         <button className="disclaimer-btn" onClick={() => setShowDisclaimer(true)}>i</button>
         {showDisclaimer && (
           <div className="disclaimer-overlay" onClick={() => setShowDisclaimer(false)}>
