@@ -177,6 +177,7 @@ body {
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
+  padding-bottom: 80px; /* Offset for bottom branding to visually center content */
 }
 
 .immersive-intro-content {
@@ -246,14 +247,19 @@ body {
   left: 1.5rem;
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-  font-size: 0.7rem;
+  gap: 0.5rem;
+  font-size: 0.75rem;
   color: var(--text-secondary);
   z-index: 10;
 }
 
+.ralph-branding a {
+  display: flex;
+  align-items: center;
+}
+
 .ralph-branding img {
-  height: 16px;
+  height: 24px;
   width: auto;
 }
 

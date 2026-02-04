@@ -525,7 +525,7 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
           </button>
         </div>
         <div className="ralph-branding">
-          Brought to you by <img src="/ralph-logo.png" alt="Ralph" />
+          Brought to you by <a href="https://ralph.world" target="_blank" rel="noopener noreferrer"><img src="/ralph-logo.png" alt="Ralph" /></a>
         </div>
         <button className="disclaimer-btn" onClick={() => setShowDisclaimer(true)}>i</button>
         {showDisclaimer && (
