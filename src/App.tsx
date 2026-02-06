@@ -320,7 +320,6 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
     setCurrentAdStart(Date.now());
 
     let contextWindow = '';
-    let runningCommentary: string[] = [];
     const intervalStartTime = Date.now();
 
     analysisIntervalRef.current = setInterval(async () => {
@@ -343,11 +342,6 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
       const result = await analyzeFrame(frame, contextWindow);
 
       if (result) {
-        // Ad boundary detection disabled for now - not working reliably
-        // TODO: revisit isNewAd logic later
-
-        runningCommentary.push(result.commentary);
-
         // Add commentary as scattered bubbles
         addCommentaryBubbles(result.commentary);
 
@@ -356,7 +350,7 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
           currentTheory: result.theory || prev.currentTheory,
           brandGuess: result.brandGuess || prev.brandGuess,
           tropeDetected: [...new Set([...prev.tropeDetected, ...(result.tropesDetected || [])])].slice(-9),
-          commentary: [...prev.commentary, { id: Date.now().toString(), text: result.commentary, timestamp: Date.now() }]
+          commentary: [...prev.commentary, { id: Date.now().toString(), text: result.commentary, timestamp: Date.now() }].slice(-20)
         }));
 
         contextWindow = `Theory: ${result.theory}. Recent: ${result.commentary}`;
@@ -495,19 +489,23 @@ IMPORTANT: If this frame is clearly from a DIFFERENT ad than your previous obser
     const update = () => {
       document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`);
     };
+    const handleOrientationChange = () => {
+      // Delay for orientation change to settle
+      setTimeout(update, 100);
+    };
+
     update();
     const vv = window.visualViewport;
     if (vv) {
       vv.addEventListener('resize', update);
     }
     window.addEventListener('resize', update);
-    window.addEventListener('orientationchange', () => {
-      // Delay for orientation change to settle
-      setTimeout(update, 100);
-    });
+    window.addEventListener('orientationchange', handleOrientationChange);
+
     return () => {
       if (vv) vv.removeEventListener('resize', update);
       window.removeEventListener('resize', update);
+      window.removeEventListener('orientationchange', handleOrientationChange);
     };
   }, [showIntro]);
 

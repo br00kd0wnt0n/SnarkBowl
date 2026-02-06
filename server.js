@@ -64,13 +64,20 @@ app.post('/api/analyze', async (req, res) => {
   }
 
   try {
+    // Validate and sanitize request body - only allow expected fields
+    const { model, messages, max_tokens, temperature, response_format } = req.body;
+    if (!model || !messages) {
+      return res.status(400).json({ error: 'Missing required fields: model, messages' });
+    }
+    const sanitizedBody = { model, messages, max_tokens, temperature, response_format };
+
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${apiKey}`
       },
-      body: JSON.stringify(req.body)
+      body: JSON.stringify(sanitizedBody)
     });
 
     if (!response.ok) {
